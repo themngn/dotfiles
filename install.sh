@@ -2,7 +2,7 @@
 echo "Welcome!"
 
 echo "Installing Staff"
-sudo dnf copr enable solopasha/hyprland
+sudo dnf copr enable solopasha/hyprland -y
 sudo dnf install stow zsh hyprland -y
 sudo dnf install alacritty -y
 sudo dnf isntall waybar -y
