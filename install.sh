@@ -5,11 +5,11 @@ echo "Installing Staff"
 sudo dnf install stow zsh hyprland -y
 sudo dnf install alacritty -y
 sudo dnf isntall waybar -y
-sudo dnf install cmake meson cpio -y #Hyprpm deps
+sudo dnf install hyprland-devel cmake meson cpio -y #Hyprpm deps
 echo "Done"
 
 echo "Installing hyprland plugins"
-hyprpm add https://github.com/Duckonaut/split-monitor-workspaces
+hyprpm add https://github.com/Duckonaut/split-monitor-workspaces -y
 hyprpm enable split-monitor-workspaces
 
 echo "Done"
