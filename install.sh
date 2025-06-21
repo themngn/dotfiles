@@ -15,6 +15,9 @@ stow hyprland
 stow zsh
 echo "Done"
 
+echo "Settings"
+chsh -s $(which zsh) mono
+echo "Done"
 
 
 
