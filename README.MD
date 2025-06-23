@@ -4,15 +4,18 @@
 ```
 git clone https://github.com/themngn/dotfiles.git .dotfiles
 ```
-
+or using SSH
+```
+git clone git@github.com:themngn/dotfiles.git .dotfiles
+```
 ## Run install script (automatic)
 
 ```
-./install.sh
+./0install.sh
 ```
 
 ## Login into Hyprland and run hyprland.sh (Not automatic)
 
 ```
-./hyprland.sh
+./1hyprland.sh
 ```
