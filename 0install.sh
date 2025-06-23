@@ -28,6 +28,7 @@ echo "Done"
 echo "Creating symlinks for dotfiles"
 stow nvim
 stow hyprland
+rm ~/.zshrc
 stow zsh
 stow tmux
 echo "Done"
