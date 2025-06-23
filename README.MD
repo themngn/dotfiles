@@ -11,7 +11,7 @@ git clone git@github.com:themngn/dotfiles.git .dotfiles
 ## Run install script (automatic)
 
 ```
-./0install.sh
+sudo ./0install.sh
 ```
 
 ## Login into Hyprland and run hyprland.sh (Not automatic)
