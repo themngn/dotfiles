@@ -82,7 +82,9 @@ setup_dotfiles() {
 # Main script execution
 main() {
     # Add repositories
-    add_repo "example_repo" "https://example.com/repo"
+    # add_repo "example_repo" "https://example.com/repo"
+    sudo dnf copr enable solopasha/hyprland -y > /dev/null
+
 
     # Install dnf packages
     install_dnf_packages
