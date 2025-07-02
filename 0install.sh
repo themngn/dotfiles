@@ -1,40 +1,105 @@
+#!/bin/bash
 
-echo "Welcome!"
+# Function to handle errors
+handle_error() {
+    echo "An error occurred at line $1. Exiting."
+    exit 1
+}
 
-if sudo -v; then
-  echo "Sudo access granted."
-else
-  echo "Sudo access denied."
-  exit 1
-fi
+# Trap errors
+TRAPERR() {
+    handle_error $LINENO
+}
 
-( while true; do sudo -n true; sleep 60; done ) &
-KEEP_ALIVE_PID=$!
+# Ask for sudo password once
+echo "Please enter your sudo password:"
+sudo -v
 
-echo "Installing Staff"
-sudo dnf copr enable solopasha/hyprland -y > /dev/null
-sudo dnf install stow -y > /dev/null 
-sudo dnf install hyprland -y > /dev/null
-sudo dnf install zsh -y > /dev/null
-sudo dnf install alacritty -y > /dev/null
-sudo dnf install rofi -y > /dev/null
-sudo dnf install waybar -y > /dev/null
-sudo dnf install hyprland-devel cmake meson cpio -y > /dev/null #Hyprpm deps
-bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
-curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
-NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-echo "Done"
+# Keep-alive: update existing `sudo` timestamp until the script finishes
+while true; do
+    sudo -n true
+    sleep 60
+    kill -0 "$$" || exit
+done 2>/dev/null &
 
-echo "Creating symlinks for dotfiles"
-stow nvim
-stow hyprland
-rm ~/.zshrc
-stow zsh
-stow tmux
-echo "Done"
+# Function to add a repository
+add_repo() {
+    local repo_name=$1
+    local repo_url=$2
+    if ! sudo dnf -y list enabled | grep -q "$repo_name"; then
+        echo "Adding repository: $repo_name"
+        sudo dnf config-manager --add-repo "$repo_url"
+    else
+        echo "Repository $repo_name already exists."
+    fi
+}
 
-echo "Settings"
-chsh -s $(which zsh) mono
-echo "Done"
+# Function to install packages using dnf
+install_dnf_packages() {
+    echo "Installing dnf packages from packages.txt..."
+    if [[ ! -f packages.txt ]]; then
+        echo "Error: packages.txt not found."
+        exit 1
+    fi
 
-kill $KEEP_ALIVE_PID
+    local packages=()
+    while IFS= read -r line; do
+        [[ "$line" =~ ^#.*$ || -z "$line" ]] && continue  # Skip comments/empty lines
+        packages+=("$line")
+    done < packages.txt
+
+    sudo dnf install -y "${packages[@]}"
+}
+
+# Function to install Homebrew
+install_homebrew() {
+    echo "Installing Homebrew..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.zshrc
+    source ~/.zshrc
+}
+
+# Function to install atuin
+install_atuin() {
+    echo "Installing atuin..."
+    /bin/bash -c "$(curl -fsSL https://setup.atuin.sh)"
+}
+
+# Function to install zinit
+install_zinit() {
+    echo "Installing zinit..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
+}
+
+# Function to set up dotfiles using stow
+setup_dotfiles() {
+    echo "Setting up dotfiles..."
+    for dir in */; do
+        [[ -d "$dir" ]] && stow -R "$dir"
+    done
+}
+
+# Main script execution
+main() {
+    # Add repositories
+    add_repo "example_repo" "https://example.com/repo"
+
+    # Install dnf packages
+    install_dnf_packages
+
+    # Install Homebrew
+    install_homebrew
+
+    # Install atuin
+    install_atuin
+
+    # Install zinit
+    install_zinit
+
+    # Set up dotfiles
+    setup_dotfiles
+
+    echo "Installation and setup completed successfully."
+}
+
+main

@@ -13,6 +13,10 @@ fi
 #plug "zsh-users/zsh-syntax-highlighting"
 #plug "romkatv/powerlevel10k"
 
+# Load and initialise completion system
+autoload -Uz compinit
+compinit
+
 #Zinit
 source "${HOME}/.local/share/zinit/zinit.git/zinit.zsh"
 zinit light zsh-users/zsh-autosuggestions
@@ -21,9 +25,8 @@ zinit light zap-zsh/zap-prompt
 zinit light zsh-users/zsh-syntax-highlighting
 zinit light romkatv/powerlevel10k
 
-# Load and initialise completion system
-autoload -Uz compinit
-compinit
+
+bindkey "^[[3~" delete-char
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
