@@ -1,0 +1,13 @@
+stow
+hyprland
+zsh
+tmux
+alacritty
+rofi
+waybar
+
+#Hyprland plugin dev
+hyprland-devel
+cmake
+meson
+cpio
