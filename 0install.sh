@@ -27,6 +27,12 @@ while true; do
     kill -0 "$$" || exit
 done 2>/dev/null &
 
+#chech if sudo has beem granted
+if ! sudo -n true; then
+	echo "Error: sudo access is required"
+	exit 1
+fi
+
 # Function to add a repository
 add_repo() {
     local repo_name=$1
