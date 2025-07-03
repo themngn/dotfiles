@@ -94,10 +94,12 @@ setup_dotfiles() {
 #Change shell to zsh
 change_shell_to_zsh() {
 	echo "Changing shell to zsh..."
-	if ! grep -q "/bin/zsh" /etc/shells; then
-		echo "/bin/zsh" | sudo tee -a /etc/shells
+	USER_NAME="$(whoami)"
+	if [[ -z "$USER_NAME" ]]; then
+		echo "Error: Unable to determine the current user."
+		exit 1
 	fi
-	chsh -s /bin/zsh
+	sudo chsh -s "$(which zsh)" "$USER_NAME"
 }
 
 # Main script execution
