@@ -94,7 +94,7 @@ setup_dotfiles() {
 #Change shell to zsh
 change_shell_to_zsh() {
 #Because we cannot use chsh in a script, we will add a few lines to .bashrc that will change the shell and remove those lines 
-	echp -e "
+	echo -e "
 	#START_OF_ZSH_CHANGE
 	chsh -s zsh
 	awk '/#START_OF_ZSH_CHANGE/,/#END_OF_ZSH_CHANGE/ {if (NR!=1) print \"\"; next} 1' ~/.bashrc > ~/.bashrc_temp
