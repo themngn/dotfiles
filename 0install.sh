@@ -102,8 +102,8 @@ change_shell_to_zsh() {
 #Because we cannot use chsh in a script, we will add a few lines to .bashrc that will change the shell and remove those lines 
 	echo -e "
 	#START_OF_ZSH_CHANGE
-	chsh -s zsh
-	awk '/#START_OF_ZSH_CHANGE/,/#END_OF_ZSH_CHANGE/ {if (NR!=1) print \"\"; next} 1' ~/.bashrc > ~/.bashrc_temp
+	chsh -s $(which zsh) || echo 'Failed to change shell to zsh. Please run chsh -s $(which zsh) manually.'
+	awk '/#START_OF_ZSH_CHANGE/,/#END_OF_ZH_CHANGE/ {if (NR==1) next} {print}' ~/.bashrc > ~/.bashrc_temp
 	mv ~/.bashrc_temp ~/.bashrc
 	#END_OF_ZSH_CHANGE" >> ~/.bashrc
 }
