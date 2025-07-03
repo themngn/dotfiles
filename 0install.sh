@@ -103,8 +103,7 @@ change_shell_to_zsh() {
 	echo -e "
 	#START_OF_ZSH_CHANGE
 	chsh -s $(which zsh) || echo 'Failed to change shell to zsh. Please run chsh -s $(which zsh) manually.'
-	awk '/#START_OF_ZSH_CHANGE/,/#END_OF_ZH_CHANGE/ {if (NR==1) next} {print}' ~/.bashrc > ~/.bashrc_temp
-	mv ~/.bashrc_temp ~/.bashrc
+	sed -i '/#START_OF_ZSH_CHANGE/,/#END_OF_ZSH_CHANGE/d' ~/.bashrc
 	#END_OF_ZSH_CHANGE" >> ~/.bashrc
 }
 
