@@ -93,14 +93,15 @@ setup_dotfiles() {
 
 #Change shell to zsh
 change_shell_to_zsh() {
-	echo "Changing shell to zsh..."
-	USER_NAME="$(whoami)"
-	if [[ -z "$USER_NAME" ]]; then
-		echo "Error: Unable to determine the current user."
-		exit 1
-	fi
-	chsh -s "$(which zsh)" "$USER_NAME"
+#Because we cannot use chsh in a script, we will add a few lines to .bashrc that will change the shell and remove those lines 
+	echp -e "
+	#START_OF_ZSH_CHANGE
+	chsh -s zsh
+	awk '/#START_OF_ZSH_CHANGE/,/#END_OF_ZSH_CHANGE/ {if (NR!=1) print \"\"; next} 1' ~/.bashrc > ~/.bashrc_temp
+	mv ~/.bashrc_temp ~/.bashrc
+	#END_OF_ZSH_CHANGE" >> ~/.bashrc
 }
+
 
 # Main script execution
 main() {
