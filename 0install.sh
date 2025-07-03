@@ -11,6 +11,11 @@ TRAPERR() {
     handle_error $LINENO
 }
 
+if [[ $EUID -eq 0 ]]; then
+	echo "This script should not be run as root. Please run it as a regular user."
+	exit 1
+fi
+
 # Ask for sudo password once
 echo "Please enter your sudo password:"
 sudo -v
@@ -54,6 +59,7 @@ install_dnf_packages() {
 # Function to install Homebrew
 install_homebrew() {
     echo "Installing Homebrew..."
+	export NONINTERACTIVE=1
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.zshrc
     source ~/.zshrc
@@ -68,15 +74,21 @@ install_atuin() {
 # Function to install zinit
 install_zinit() {
     echo "Installing zinit..."
+	export NO_INPUT=1
+	export NO_EDIT=1
+	export NO_ANNEXES=1
+	export NO_TUTORIAL=1
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
 }
 
 # Function to set up dotfiles using stow
 setup_dotfiles() {
     echo "Setting up dotfiles..."
-    for dir in */; do
-        [[ -d "$dir" ]] && stow -R "$dir"
-    done
+	stow nvim
+	stow tmux
+	stow hyprland
+	mv ~/.zshrc ~/.zshrc_back_$(date +%Y%m%d_%H%M%S)
+	stow zsh
 }
 
 # Main script execution
