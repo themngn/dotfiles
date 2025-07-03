@@ -124,6 +124,8 @@ main() {
     # Set up dotfiles
     setup_dotfiles
 
+	# Change shell to zsh
+	change_shell_to_zsh
     echo "Installation and setup completed successfully."
 }
 
