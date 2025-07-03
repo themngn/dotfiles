@@ -99,7 +99,7 @@ change_shell_to_zsh() {
 		echo "Error: Unable to determine the current user."
 		exit 1
 	fi
-	sudo usermod -s "$(which zsh)" "$USER_NAME"
+	chsh -s "$(which zsh)" "$USER_NAME"
 }
 
 # Main script execution
