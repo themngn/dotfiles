@@ -91,6 +91,15 @@ setup_dotfiles() {
 	stow zsh
 }
 
+#Change shell to zsh
+change_shell_to_zsh() {
+	echo "Changing shell to zsh..."
+	if ! grep -q "/bin/zsh" /etc/shells; then
+		echo "/bin/zsh" | sudo tee -a /etc/shells
+	fi
+	chsh -s /bin/zsh
+}
+
 # Main script execution
 main() {
     # Add repositories

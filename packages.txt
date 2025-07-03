@@ -1,10 +1,13 @@
 stow
-hyprland
 zsh
 tmux
 alacritty
-rofi
+fastfetch
+nvim
+#Hyprland stuff
+hyprland
 waybar
+rofi
 
 #Hyprland plugin dev
 hyprland-devel
